@@ -202,7 +202,7 @@ catkin_install_python(PROGRAMS
   src/bluerov/bin/video
   src/bluerov/gazebo_teleop.py
   src/bluerov/sitl.py
-  src/bridge/bridge.py
+  src/bridge/mavlink_bridge.py
   src/bridge/bluerov_node.py
   src/bridge/node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

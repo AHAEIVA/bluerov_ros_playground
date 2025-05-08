@@ -47,7 +47,8 @@ class Subs(object):
                 current_level[part] = {}
             current_level = current_level[part]
         if value is not {}:
-            current_level.update(yaml.load(str(value)))
+            # Use safe_load for security
+            current_level.update(yaml.safe_load(str(value)))
 
     def subscribe_topic(self, topic, msg_type, queue_size=1, callback=None):
         """ Subscribe in ROS topic

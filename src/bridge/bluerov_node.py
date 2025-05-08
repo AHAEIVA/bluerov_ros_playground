@@ -9,16 +9,10 @@ import rospy
 import sys
 import time
 
-from bridge import Bridge
-
-try:
-    from pubs import Pubs
-    from subs import Subs
-    from video import Video
-except:
-    from bluerov.pubs import Pubs
-    from bluerov.subs import Subs
-    from bluerov.video import Video
+from bridge.mavlink_bridge import Bridge
+from bluerov.pubs import Pubs
+from bluerov.subs import Subs
+from bluerov.video import Video
 
 # convert opencv image to ros image msg
 from cv_bridge import CvBridge
@@ -492,14 +486,14 @@ class BlueRov(Bridge):
                 self.mavlink_msg_available[topic] = time.time()
                 print(e)
 
-if __name__ == '__main__':
-    try:
-        rospy.init_node('user_node', log_level=rospy.DEBUG)
-    except rospy.ROSInterruptException as error:
-        print('pubs error with ROS: ', error)
-        exit(1)
-
-    bluerov = BlueRov(device='udp:localhost:14550')
-
-    while not rospy.is_shutdown():
-        bluerov.publish()
+# if __name__ == '__main__':
+#     try:
+#         rospy.init_node('user_node', log_level=rospy.DEBUG)
+#     except rospy.ROSInterruptException as error:
+#         print('pubs error with ROS: ', error)
+#         exit(1)
+#
+#     bluerov = BlueRov(device='udp:localhost:14550')
+#
+#     while not rospy.is_shutdown():
+#         bluerov.publish()
