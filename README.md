@@ -14,15 +14,15 @@ What is possible ?
 
 ### Requirements ###
 - git
-- [ros-\*-desktop-full](http://wiki.ros.org/ROS/Installation)
-  - kinetic or newer
-- [mavros](http://wiki.ros.org/mavros)
-- python
-  - opencv_python
-  - numpy
-  - [gi, gobject](https://wiki.ubuntu.com/Novacut/GStreamer1.0)
-  - PyYAML
-- [freefloating_gazebo](https://github.com/freefloating-gazebo/freefloating_gazebo)
+- [ROS Noetic Desktop Full](http://wiki.ros.org/noetic/Installation/Ubuntu) (Tested on Noetic, might work on newer versions)
+- [mavros](http://wiki.ros.org/mavros) (`sudo apt-get install ros-noetic-mavros ros-noetic-mavros-extras`)
+- Python 3 (`python3-dev`)
+- Python Packages:
+  - `pip install opencv-python numpy PyYAML pymavlink`
+- GStreamer & Python Bindings (for video and `video.py` / `bluerov2_node`):
+  - `sudo apt-get update`
+  - `sudo apt-get install python3-gi python3-gst-1.0 gir1.2-gst-plugins-base-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-libav`
+- (Optional for Gazebo Simulation) [freefloating_gazebo](https://github.com/freefloating-gazebo/freefloating_gazebo)
 
 
 ### Installation ###
@@ -33,20 +33,31 @@ What is possible ?
  3. Go back to your ROS workspace:
     - `$ cd ../`
  4. Build and install it:
-    - `$ catkin_make --pkg bluerov_ros_playground`
-    - if using ROS from source:
-        - `$./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --pkg bluerov_ros_playground`
- 5. Reload your ROS env.
-    - bash: `$ source devel/setup.sh`
-    - zsh: `$ source devel/setup.sh`
+    - `$ catkin build bluerov_ros_playground` (Recommended) or `$ catkin_make --pkg bluerov_ros_playground`
+ 5. Reload your ROS env in every new terminal before running nodes:
+    - `$ source devel/setup.bash` (if using bash)
+    - `$ source devel/setup.zsh` (if using zsh)
 
 ## Running ##
 
-- BlueRov2 node
+### BlueRov2 MAVLink Bridge Node (`bluerov2_node.launch`) ###
 
-    For more information check [here](src/bridge/README.md).
+This node acts as a bridge between the BlueROV2 (via MAVLink over UDP) and ROS. It subscribes to ROS topics to send commands (RC overrides, mode changes, servo PWM) to the ROV and publishes ROV data (IMU, odometry, battery, state, camera stream) onto ROS topics.
 
-- Launch user example
+**Prerequisites:**
+- Ensure all dependencies listed under "Requirements" are installed.
+- Make sure the BlueROV2 is powered on and connected to the network.
+- The BlueROV2 companion computer should be configured to send MAVLink UDP packets to the computer running this ROS node on port 14550.
+
+**How to Run:**
+1. Source your workspace setup file: `source devel/setup.bash`
+2. Launch the node: `roslaunch bluerov_ros_playground bluerov2_node.launch`
+
+**Configuration:**
+- The launch file uses the argument `bluerov_node_device` to specify the MAVLink connection string.
+- The default value is `udpin:0.0.0.0:14550`, which means the node will listen for incoming UDP packets on port 14550 on all network interfaces of the computer running the node.
+
+### Launch User Example (`user_mav.launch`) ###
 
     This example will start user example, reading data from mavlink, interacting with joystick over rc commands and showing ROV video stream.
     - `roslaunch bluerov_ros_playground user_mav.launch`
