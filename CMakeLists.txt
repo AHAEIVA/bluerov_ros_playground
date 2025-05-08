@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.22.1)
 project(bluerov_ros_playground)
+
+set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS ON)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
